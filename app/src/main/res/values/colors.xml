@@ -5,6 +5,7 @@
     <color name="colorAccent">#03A9F4</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="light_gray">#d6dbdf</color>
     <!-- Colores para el fondo del BottomNavigationView -->
     <color name="bottom_nav_color">#1976D2</color>
 </resources>
