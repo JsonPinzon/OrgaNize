@@ -1,85 +1,81 @@
 package co.poli.organize
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
+import co.poli.organize.databinding.ActivityMainBinding
+import co.poli.organize.fragments.tasks.TasksFragment
 import co.poli.organize.fragments.CalendarFragment
-import co.poli.organize.fragments.CreateTaskFragment
-import co.poli.organize.fragments.DashboardFragment
-import co.poli.organize.fragments.SettingsFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import co.poli.organize.fragments.settings.SettingsFragment
+
 
 class MainActivity : AppCompatActivity() {
 
-    // Declaración de variables para los componentes de la UI
-    private lateinit var toolbar: Toolbar
-    private lateinit var bottomNavigation: BottomNavigationView
-    private lateinit var fabAddTask: FloatingActionButton
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var toolbarTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Inicializar componentes
-        initializeViews()
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // Configurar la Toolbar
-        setSupportActionBar(toolbar)
+        toolbarTitle = findViewById(R.id.toolbarTitle)
+        toolbarTitle.text = "ORGANIZE"
 
-        // Configurar los eventos de los componentes
-        setupListeners()
+        toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolbar,
+            R.string.open,
+            R.string.close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
-        // Mostrar el fragmento inicial (Dashboard)
-        /*if (savedInstanceState == null) {
-            loadFragment(DashboardFragment())
-        }*/
-    }
+        binding.navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                }
+            }
+            binding.drawerLayout.closeDrawers()
+            true
+        }
 
-    private fun initializeViews() {
-        toolbar = findViewById(R.id.toolbar)
-        bottomNavigation = findViewById(R.id.bottomNavigation)
-        fabAddTask = findViewById(R.id.fabAddTask)
-    }
-
-    private fun setupListeners() {
-        // Configurar el navegador inferior
-        bottomNavigation.setOnItemSelectedListener { item ->
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_dashboard -> {
-                    loadFragment(DashboardFragment())
-                    return@setOnItemSelectedListener true
+                    loadFragment(TasksFragment())
+                    toolbarTitle.text = "ORGANIZE"
                 }
                 R.id.nav_calendar -> {
                     loadFragment(CalendarFragment())
-                    return@setOnItemSelectedListener true
+
+                    toolbarTitle.text = "CALENDARIO"
                 }
                 R.id.nav_settings -> {
                     loadFragment(SettingsFragment())
-                    return@setOnItemSelectedListener true
+                    toolbarTitle.text = "CONFIGURACIÓN"
                 }
-                else -> false
+
             }
+            true
         }
 
-        // Configurar el botón flotante para añadir tareas
-        fabAddTask.setOnClickListener {
-            showCreateTaskFragment()
+        if (savedInstanceState == null) {
+            binding.bottomNavigation.selectedItemId = R.id.nav_dashboard
         }
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    private fun loadFragment(fragment: androidx.fragment.app.Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
-            .commit()
-    }
-
-    private fun showCreateTaskFragment() {
-        // Mostrar el fragmento para crear una nueva tarea
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, CreateTaskFragment())
-            .addToBackStack(null) // Permite volver al fragmento anterior
             .commit()
     }
 }
