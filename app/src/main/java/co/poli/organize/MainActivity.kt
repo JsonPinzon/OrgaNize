@@ -5,10 +5,15 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import co.poli.organize.databinding.ActivityMainBinding
-import co.poli.organize.fragments.tasks.TasksFragment
 import co.poli.organize.fragments.CalendarFragment
+import co.poli.organize.fragments.VideoFragment
+
 import co.poli.organize.fragments.settings.SettingsFragment
+import co.poli.organize.fragments.tasks.GalleryFragment
+import co.poli.organize.fragments.tasks.TasksFragment
+import co.poli.organize.fragments.tasks.WebFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        toolbarTitle = findViewById(R.id.toolbarTitle)
+        toolbarTitle = binding.toolbarTitle
         toolbarTitle.text = "ORGANIZE"
 
         toggle = ActionBarDrawerToggle(
@@ -43,6 +48,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_profile -> {
                     startActivity(Intent(this, ProfileActivity::class.java))
                 }
+                R.id.nav_galeria -> loadFragment(GalleryFragment())
+                R.id.nav_video -> loadFragment(VideoFragment())
+                R.id.nav_web -> loadFragment(WebFragment())
             }
             binding.drawerLayout.closeDrawers()
             true
@@ -56,14 +64,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_calendar -> {
                     loadFragment(CalendarFragment())
-
                     toolbarTitle.text = "CALENDARIO"
                 }
                 R.id.nav_settings -> {
                     loadFragment(SettingsFragment())
                     toolbarTitle.text = "CONFIGURACIÓN"
                 }
-
             }
             true
         }
@@ -73,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadFragment(fragment: androidx.fragment.app.Fragment) {
+    private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
             .commit()
