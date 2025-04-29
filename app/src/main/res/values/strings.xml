@@ -21,4 +21,9 @@
     <string name="error_passwords_dont_match">Las contraseñas no coinciden</string>
     <string name="login_success">Inicio de sesión exitoso</string>
     <string name="register_success">Registro exitoso</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+
+
 </resources>

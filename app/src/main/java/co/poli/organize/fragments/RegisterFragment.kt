@@ -13,8 +13,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class RegisterFragment : Fragment() {
-
-    // Declaración de variables para los componentes de la UI
     private lateinit var tilName: TextInputLayout
     private lateinit var tilRegEmail: TextInputLayout
     private lateinit var tilRegPassword: TextInputLayout
@@ -30,17 +28,12 @@ class RegisterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflar el layout para este fragmento
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Inicializar componentes
         initializeViews(view)
-
-        // Configurar eventos
         setupListeners()
     }
 
@@ -59,7 +52,6 @@ class RegisterFragment : Fragment() {
     private fun setupListeners() {
         btnRegister.setOnClickListener {
             if (validateInputs()) {
-                // Realizar el proceso de registro
                 register()
             }
         }
@@ -67,8 +59,6 @@ class RegisterFragment : Fragment() {
 
     private fun validateInputs(): Boolean {
         var isValid = true
-
-        // Validar nombre
         val name = etName.text.toString().trim()
         if (name.isEmpty()) {
             tilName.error = getString(R.string.error_empty_name)
@@ -77,7 +67,6 @@ class RegisterFragment : Fragment() {
             tilName.error = null
         }
 
-        // Validar correo electrónico
         val email = etRegEmail.text.toString().trim()
         if (email.isEmpty()) {
             tilRegEmail.error = getString(R.string.error_empty_email)
@@ -89,7 +78,6 @@ class RegisterFragment : Fragment() {
             tilRegEmail.error = null
         }
 
-        // Validar contraseña
         val password = etRegPassword.text.toString()
         if (password.isEmpty()) {
             tilRegPassword.error = getString(R.string.error_empty_password)
@@ -101,7 +89,6 @@ class RegisterFragment : Fragment() {
             tilRegPassword.error = null
         }
 
-        // Validar confirmación de contraseña
         val confirmPassword = etConfirmPassword.text.toString()
         if (confirmPassword.isEmpty()) {
             tilConfirmPassword.error = getString(R.string.error_empty_confirm_password)
@@ -117,17 +104,11 @@ class RegisterFragment : Fragment() {
     }
 
     private fun register() {
-        // En una implementación real, aquí conectaríamos con el backend para registrar al usuario
-        // Por ahora, simularemos un registro exitoso
-
-        // Mostrar un mensaje de éxito
         Toast.makeText(
             requireContext(),
             getString(R.string.register_success),
             Toast.LENGTH_SHORT
         ).show()
-
-        // Navegar a la pantalla principal o volver al login
         (activity as? LoginActivity)?.navigateToMainActivity()
     }
 }
